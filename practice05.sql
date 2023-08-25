@@ -129,27 +129,28 @@ SELECT d.department_name
 
 -- 문제9
 -- 평균 급여(salary)가 가장 높은 지역은?
-SELECT r.region_name
-  FROM departments d, locations l, countries c, regions r , (SELECT AVG(salary), department_id
-                                                               FROM employees
-                                                              GROUP BY department_id
-                                                             HAVING AVG(salary) >= ALL (SELECT AVG(salary)
-                                                                                          FROM employees
-                                                                                         GROUP BY department_id)) dd
- WHERE d.department_id = dd.department_id
-   AND d.location_id = l.location_id
-   AND l.country_id = c.country_id
-   AND c.region_id = r.region_id;
+SELECT ree.region_name
+  FROM (SELECT ROWNUM rn, re.region_id, re.region_name
+          FROM (SELECT AVG(salary), r.region_id, r.region_name
+                  FROM employees e, departments d, locations l, countries c, regions r
+                 WHERE e.department_id = d.department_id
+                   AND d.location_id = l.location_id
+                   AND l.country_id = c.country_id
+                   AND c.region_id = r.region_id
+                 GROUP BY r.region_id, r.region_name
+                 ORDER BY AVG(salary) DESC) re
+         ) ree
+ WHERE ree.rn = 1;
 
 -- 문제10
 -- 평균 급여(salary)가 가장 높은 업무는?
-SELECT j.job_title
-  FROM departments d, employees e, jobs j , (SELECT AVG(salary), department_id
-                                                               FROM employees
-                                                              GROUP BY department_id
-                                                             HAVING AVG(salary) >= ALL (SELECT AVG(salary)
-                                                                                          FROM employees
-                                                                                         GROUP BY department_id)) dd
- WHERE d.department_id = dd.department_id
-   AND d.manager_id = e.employee_id
-   AND e.job_id = j.job_id;
+SELECT job.job_title
+  FROM (SELECT ROWNUM rn, jo.job_id, jo.job_title
+          FROM (SELECT AVG(salary), j.job_id, j.job_title
+                  FROM employees e, departments d, jobs j
+                 WHERE e.department_id = d.department_id
+                   AND e.job_id = j.job_id
+                 GROUP BY j.job_id, j.job_title
+                 ORDER BY AVG(salary) DESC) jo
+         ) job
+ WHERE job.rn = 1;
