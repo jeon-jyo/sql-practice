@@ -1,3 +1,5 @@
+-- Practice02.SQL_실습문제_집계
+
 -- 문제1
 -- 매니저가 있는 직원은 몇 명입니까?
 SELECT COUNT(*) "haveMngCnt"
@@ -5,11 +7,11 @@ SELECT COUNT(*) "haveMngCnt"
  WHERE manager_id IS NOT NULL;
 
 -- 문제2
--- 직원중에 최고임금(salary)과  최저임금을 “최고임금, “최저임금” 프로젝션 타이틀로 함께 출력해 보세요.
+-- 직원중에 최고임금(salary)과 최저임금을 “최고임금”, “최저임금” 프로젝션 타이틀로 함께 출력해 보세요.
 -- 두 임금의 차이는 얼마인가요?  “최고임금 – 최저임금”이란 타이틀로 함께 출력해 보세요.
 SELECT MAX(salary) 최고임금
        ,MIN(salary) 최저임금
-       ,MAX(salary)-MIN(salary) "최고임금-최저임금"
+       ,MAX(salary)-MIN(salary) "최고임금 - 최저임금"
   FROM employees;
 
 -- 문제3
@@ -44,7 +46,7 @@ SELECT AVG(salary)
 -- 문제6
 -- 가장 오래 근속한 직원의 입사일은 언제인가요? 다음 형식으로 출력해주세요.
 -- 예) 2001-01-13 토요일
-SELECT TO_CHAR(MIN(hire_date), 'YYYY"년 "MM"월 "DD"일"') "오래 근속한 사원"
+SELECT TO_CHAR(MIN(hire_date), 'YYYY"년 "MM"월 "DD"일"') "가장 오래 근속한 사원"
   FROM employees;
 
 -- 문제7
@@ -56,13 +58,14 @@ SELECT department_id
        ,AVG(salary)-MIN(salary) "평균임금 – 최저임금"
   FROM employees
  GROUP BY department_id
-HAVING AVG(salary)-MIN(salary) < 20000
+HAVING AVG(salary)-MIN(salary) < 2000
  ORDER BY AVG(salary)-MIN(salary) DESC;
 
 -- 문제8
 -- 업무(JOBS)별로 최고임금과 최저임금의 차이를 출력해보세요.
--- 차이를 확인할 수 있도록 내림차순으로 정렬하세요
-SELECT MAX(salary)-MIN(salary)
+-- 차이를 확인할 수 있도록 내림차순으로 정렬하세요.
+SELECT job_id
+       ,MAX(salary)-MIN(salary)
   FROM employees
  GROUP BY job_id
  ORDER BY MAX(salary)-MIN(salary) DESC;
@@ -80,8 +83,8 @@ HAVING AVG(salary) >= 5000
  ORDER BY AVG(salary) DESC;
 
 -- 문제10
--- 아래회사는 보너스 지급을 위해 직원을 입사일 기준으로 나눌려고 합니다. 
--- 입사일이 02/12/31일 이전이면 '창립맴버, 03년은 '03년입사’, 04년은 ‘04년입사’ 
+-- 아래회사는 보너스 지급을 위해 직원을 입사일 기준으로 나눌려고 합니다.
+-- 입사일이 02/12/31일 이전이면 '창립맴버, 03년은 '03년입사’, 04년은 ‘04년입사’
 -- 이후입사자는 ‘상장이후입사’ optDate 컬럼의 데이터로 출력하세요.
 -- 정렬은 입사일로 오름차순으로 정렬합니다.
 SELECT CASE
@@ -90,6 +93,6 @@ SELECT CASE
             WHEN hire_date LIKE '04/__/__' THEN '04년입사'
             WHEN hire_date LIKE '04/__/__' THEN '04년입사'
             ELSE '상장이후입사'
-       END "optDate"
+        END "optDate"
   FROM employees
  ORDER BY hire_date ASC;

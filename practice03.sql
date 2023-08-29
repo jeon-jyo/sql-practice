@@ -1,7 +1,8 @@
+-- Practice03.SQL_실습문제_조인
+
 -- 문제1
--- 직원들의 사번(employee_id), 이름(first_name), 성(last_name)과
--- 부서명(department_name)을 조회하여 부서이름(department_name) 오름차순,
--- 사번(employee_id) 내림차순 으로 정렬하세요.
+-- 직원들의 사번(employee_id), 이름(first_name), 성(last_name)과 부서명(department_name)을
+-- 조회하여 부서이름(department_name) 오름차순, 사번(employee_id) 내림차순 으로 정렬하세요.
 -- (106건)
 SELECT e.employee_id
        ,e.first_name
@@ -28,7 +29,7 @@ SELECT e.employee_id
  ORDER BY e.employee_id ASC;
 
 -- 문제2-1
--- 문제2에서 부서가 없는 Kimberely(사번 178)까지 표시해 보세요
+-- 문제2에서 부서가 없는 Kimberely(사번 178)까지 표시해 보세요.
 -- (107건)
 SELECT e.employee_id
        ,e.first_name
@@ -54,7 +55,7 @@ SELECT e.employee_id
 
 -- 문제3
 -- 도시별로 위치한 부서들을 파악하려고 합니다.
--- 도시아이디, 도시명, 부서명, 부서아이디를 도시아이디(오름차순)로 정렬하여 출력하세요
+-- 도시아이디, 도시명, 부서명, 부서아이디를 도시아이디(오름차순)로 정렬하여 출력하세요.
 -- 부서가 없는 도시는 표시하지 않습니다.
 -- (27건)
 SELECT l.location_id
@@ -73,7 +74,7 @@ SELECT l.location_id
        ,d.department_name
        ,d.department_id
   FROM departments d RIGHT OUTER JOIN locations l
-    ON d.location_id(+) = l.location_id
+    ON d.location_id = l.location_id
  ORDER BY l.location_id ASC;
 
 -- 문제4
@@ -97,8 +98,7 @@ SELECT e.employee_id
        ,m.hire_date
   FROM employees e, employees m
  WHERE e.manager_id = m.employee_id
-   AND e.hire_date < m.hire_date
- ORDER BY e.employee_id ASC;
+   AND e.hire_date < m.hire_date;
 
 -- 문제6
 -- 나라별로 어떠한 부서들이 위치하고 있는지 파악하려고 합니다.
@@ -122,7 +122,7 @@ SELECT c.country_name
 -- 이름은 first_name과 last_name을 합쳐 출력합니다.
 -- (2건)
 SELECT e.employee_id
-       ,e.first_name || e.last_name "풀네임"
+       ,e.first_name || e.last_name "이름"
        ,h.job_id
        ,h.start_date
        ,h.end_date
@@ -133,8 +133,7 @@ SELECT e.employee_id
 
 -- 문제8
 -- 각 부서(department)에 대해서 부서번호(department_id), 부서이름(department_name), 
--- 매니저(manager)의 이름(first_name), 위치(locations)한 도시(city),
--- 나라(countries)의 이름(countries_name)
+-- 매니저(manager)의 이름(first_name), 위치(locations)한 도시(city), 나라(countries)의 이름(countries_name)
 -- 그리고 지역구분(regions)의 이름(resion_name)까지 전부 출력해 보세요.
 -- (11건)
 SELECT d.department_id
